@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#123f78">
+  <meta name="description" content="STI College student attendance and event management portal.">
+  <title>STI Attendance Management System</title>
+  <link rel="icon" href="assets/sti-logo.jpg">
+  <link rel="stylesheet" href="platform.css">
+</head>
+<body>
+  <main id="login-screen" class="login-screen">
+    <section class="login-photo" aria-label="Students on campus">
+      <img src="assets/campus-students.png" alt="STI students gathered together on campus">
+      <div class="photo-top"><img src="assets/sti-logo.jpg" alt="STI College"><span>STI COLLEGE <b>·</b> CAMPUS PORTAL</span></div>
+      <div class="photo-caption"><span>EVERY DAY COUNTS</span><h1>Here for the moments that move you forward.</h1><p>Attendance, events, and campus life — together in one place.</p></div>
+    </section>
+    <section class="login-panel">
+      <div class="login-brand"><img src="assets/sti-logo.jpg" alt=""><span>STI COLLEGE<br><strong>ATTENDANCE SYSTEM</strong></span></div>
+      <p class="eyebrow">YOUR CAMPUS, IN SYNC</p>
+      <h2>Welcome back</h2>
+      <p class="login-copy">Sign in to stay connected to your classes, your campus, and the people counting on you.</p>
+      <form id="login-form" class="form-stack">
+        <label>Account type
+          <select name="role" required>
+            <option value="Student">Student</option>
+            <option value="Teacher">Teacher</option>
+            <option value="SSG">SSG</option>
+            <option value="Admin">Administrator</option>
+          </select>
+        </label>
+        <label><span id="login-id-label">Student ID</span>
+          <input name="username" autocomplete="username" required placeholder="Enter your account ID">
+        </label>
+        <label>Password
+          <input name="password" type="password" autocomplete="current-password" required placeholder="Enter your password">
+        </label>
+        <button class="button primary wide" type="submit">Sign in <span aria-hidden="true">→</span></button>
+        <p id="login-status" class="form-status" role="status" aria-live="polite"></p>
+      </form>
+      <button id="forgot-password" class="text-button" type="button">Student? Reset password with your ID and date of birth</button>
+      <p class="demo-hint">Local demo administrator: <strong>admin</strong> / <strong>admin123</strong></p>
+      <footer>STI Attendance Management System <span>·</span> Campus access</footer>
+    </section>
+  </main>
+
+  <div id="app-screen" class="app-screen" hidden>
+    <aside class="sidebar">
+      <a class="brand-lockup" href="#" data-view="overview"><img src="assets/sti-logo.jpg" alt=""><span>STI ATTENDANCE<small>STUDENT PORTAL</small></span></a>
+      <div class="workspace-label">WORKSPACE</div>
+      <nav id="navigation" class="navigation" aria-label="Main navigation"></nav>
+      <div class="sidebar-bottom">
+        <button id="theme-toggle" class="sidebar-link" type="button"><span>◐</span><span>Toggle appearance</span></button>
+        <div class="user-card"><div id="user-avatar" class="avatar">S</div><div class="user-info"><strong id="user-name">User</strong><span id="user-role">Role</span></div><button id="logout" type="button" aria-label="Sign out">↪ <span>Sign out</span></button></div>
+      </div>
+    </aside>
+    <main class="main-area">
+      <header class="topbar">
+        <div><p class="eyebrow">STI COLLEGE <span>·</span> SCHOOL YEAR 2026–2027</p><h1 id="page-title">Overview</h1></div>
+        <div class="topbar-actions"><span id="today-label" class="today-label"></span><button id="notifications-open" class="button outline" type="button">Notifications <span id="notifications-count" class="notification-count" hidden></span></button><button id="help-open" class="button outline" type="button">Campus help</button><button id="top-logout" class="button outline" type="button">Sign out</button></div>
+      </header>
+      <div id="view-container" class="view-container" aria-live="polite"></div>
+    </main>
+  </div>
+
+  <dialog id="scanner-dialog" class="modal">
+    <div class="modal-head"><div><p class="eyebrow">QUICK SCAN</p><h2>Scan student QR</h2></div><button class="icon-close" type="button" data-close="scanner-dialog" aria-label="Close">&times;</button></div>
+    <p class="muted">Allow camera access to scan a student’s assigned attendance QR code.</p>
+    <video id="scanner-video" playsinline muted></video>
+    <p id="scanner-status" class="form-status" role="status"></p>
+    <button id="stop-scanner" class="button outline" type="button">Stop camera</button>
+  </dialog>
+
+  <dialog id="reset-dialog" class="modal">
+    <div class="modal-head"><div><p class="eyebrow">STUDENT ACCOUNT</p><h2>Reset password</h2></div><button class="icon-close" type="button" data-close="reset-dialog" aria-label="Close">&times;</button></div>
+    <form id="reset-form" class="form-stack">
+      <label>Student ID<input name="studentId" required autocomplete="username"></label>
+      <label>Date of birth<input name="dateOfBirth" type="date" required></label>
+      <label>New password<input name="newPassword" type="password" minlength="10" required autocomplete="new-password"></label>
+      <button class="button primary" type="submit">Verify and reset password</button>
+      <p class="form-status" role="status"></p>
+    </form>
+  </dialog>
+
+  <dialog id="qr-dialog" class="modal qr-modal">
+    <div class="modal-head"><div><p class="eyebrow">STI ATTENDANCE</p><h2>Attendance QR code</h2></div><button class="icon-close" type="button" data-close="qr-dialog" aria-label="Close">&times;</button></div>
+    <img id="qr-dialog-image" class="qr-preview" alt="QR code">
+    <p id="qr-dialog-caption" class="muted"></p>
+  </dialog>
+
+  <dialog id="credential-dialog" class="modal">
+    <div class="modal-head"><div><p class="eyebrow">SHARE SECURELY</p><h2 id="credential-title">Temporary password</h2></div><button class="icon-close" type="button" data-close="credential-dialog" aria-label="Close">&times;</button></div>
+    <p class="muted">This password is shown only once. Copy it and share it with the account holder through a private channel.</p>
+    <label class="field-label">Initial password<input id="credential-value" class="field-control" type="text" readonly></label>
+    <div class="event-card-actions"><button id="credential-copy" class="button primary" type="button">Copy password</button><span id="credential-status" class="helper" role="status"></span></div>
+  </dialog>
+
+  <dialog id="help-dialog" class="modal help-dialog">
+    <div class="modal-head"><div><p class="eyebrow">STI CAMPUS GUIDE</p><h2>Campus help</h2></div><button class="icon-close" type="button" data-close="help-dialog" aria-label="Close">&times;</button></div>
+    <p class="muted">Quick answers about attendance, events, accounts, and getting support. This guide works locally and does not send questions to an external service.</p>
+    <div id="help-thread" class="help-thread" aria-live="polite"></div>
+    <div class="help-suggestions"><button type="button" data-help-question="How do I record attendance?">Attendance</button><button type="button" data-help-question="Where can I find school events?">Events</button><button type="button" data-help-question="How do I reset my password?">Password help</button><button type="button" data-help-question="How can I contact support?">Student support</button></div>
+    <form id="help-form" class="help-form"><label class="sr-only" for="help-question">Ask campus help</label><textarea id="help-question" name="question" rows="2" maxlength="300" required placeholder="Ask a campus question…"></textarea><button class="button primary" type="submit">Ask</button></form>
+  </dialog>
+
+  <dialog id="notifications-dialog" class="modal notifications-dialog">
+    <div class="modal-head"><div><p class="eyebrow">CAMPUS UPDATES</p><h2>Notifications</h2></div><button class="icon-close" type="button" data-close="notifications-dialog" aria-label="Close">&times;</button></div>
+    <div id="notifications-content" class="notifications-content"></div>
+  </dialog>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <script src="app.js" defer></script>
+</body>
+</html>
